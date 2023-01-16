@@ -1,2 +1,66 @@
-
-<a href="Jetson/camera_bootloader.html">Installing Raspberry Pi Hi Def drivers on Nvidia Jetson Nano</a>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My GitHub Space</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.0/css/bulma.min.css" integrity="sha512-lC9IPUYjdF/hM3iMjc2uOo7TUdwjEKZ2yCjLcW/9ARxQw3O3/Lh3j3D3k8wN/8f0b4aTZ/kq8Jvx1L/rJYBx3ww==" crossorigin="anonymous" />
+</head>
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title">Welcome to My GitHub Space</h1>
+      <p>Here you'll find my blog posts, which are searchable using the form below.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <form>
+        <div class="field has-addons">
+          <div class="control is-expanded">
+            <input class="input" type="text" placeholder="Search blog posts" id="search-input">
+          </div>
+          <div class="control">
+            <button class="button is-info" id="search-button">Search</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div id="blog-posts"></div>
+    </div>
+  </section>
+  <script>
+    // Fetch markdown files from the resources folder and convert them to HTML
+    fetch('/resources/*.md')
+      .then(response => response.text())
+      .then(text => {
+        // Parse the markdown into HTML
+        const converter = new showdown.Converter();
+        const html = converter.makeHtml(text);
+        // Insert the HTML into the #blog-posts element
+        document.querySelector('#blog-posts').innerHTML = html;
+        // Add an event listener to the search button
+        document.querySelector('#search-button').addEventListener('click', searchPosts);
+      });
+    
+    function searchPosts() {
+      // Get the search input value
+      const searchTerm = document.querySelector('#search-input').value;
+      // Get all the blog post elements
+      const blogPosts = document.querySelectorAll('.blog-post');
+      // Loop through the blog post elements
+      blogPosts.forEach(post => {
+        // Check if the search term is found in the post's text
+        if (post.textContent.includes(searchTerm)) {
+          // Show the post
+          post.style.display = 'block';
+        } else {
+          // Hide the post
+          post.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
