@@ -31,7 +31,7 @@
       <div id="blog-posts"></div>
     </div>
   </section>
-  <script>
+<script>
     // Fetch markdown files from the resources folder and convert them to HTML
     fetch('/resources/*.md')
       .then(response => response.text())
@@ -39,8 +39,20 @@
         // Parse the markdown into HTML
         const converter = new showdown.Converter();
         const html = converter.makeHtml(text);
-        // Insert the HTML into the #blog-posts element
-        document.querySelector('#blog-posts').innerHTML = html;
+        // Create a DOM element from the HTML
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        // Get all the blog post elements
+        const blogPosts = doc.querySelectorAll('.blog-post');
+        // Loop through the blog post elements
+        blogPosts.forEach(post => {
+          // Create a new link element
+          const link = document.createElement('a');
+          link.href = `/post/${post.id}`;
+          link.innerHTML = post.innerHTML;
+          // Insert the link element into the blog-posts element
+          document.querySelector('#blog-posts').appendChild(link);
+        });
         // Add an event listener to the search button
         document.querySelector('#search-button').addEventListener('click', searchPosts);
       });
